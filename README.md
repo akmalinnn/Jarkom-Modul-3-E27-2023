@@ -182,7 +182,7 @@ iface eth0 inet dhcp
   apt install apache2-utils -y
   ```
 
-# 1 
+# Soal 1 
 Melakukan register domain berupa riegel.canyon.yyy.com untuk worker Laravel dan granz.channel.yyy.com untuk worker PHP (0) mengarah pada worker yang memiliki IP [prefix IP].x.1. sesuai dengan konfigurasi diatas , kemudia semua CLIENT harus menggunakan konfigurasi dari DHCP Server.
 
 - Pertama kita mengatur konfigurasi pada DNS server (Helter)
