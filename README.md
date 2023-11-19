@@ -7,7 +7,7 @@
 | 2    | Akmal Nafis         | 5025211216   |
 
 # Topologi
-![Alt text](image.png)
+![Alt text](img/image.png)
 
 # Konfigurasi network dan ./bashrc
 - **Aura (DHCP Relay)**
@@ -280,7 +280,7 @@ subnet 10.50.4.0 netmask 255.255.255.0 {
 ```
 # Soal 3
 Client yang melalui Switch4 mendapatkan range IP dari [prefix IP].4.12 - [prefix IP].4.20 dan [prefix IP].4.160 - [prefix IP].4.168 
-- 
+- disini menambahkan konfigurasi Switch4 pada `/etc/dhcp/dhcpd.conf`
 
 ```sh
 echo 'subnet 10.50.1.0 netmask 255.255.255.0 {
@@ -303,7 +303,7 @@ subnet 10.50.4.0 netmask 255.255.255.0 {
 ```
 # Soal 4
 Client mendapatkan DNS dari Heiter dan dapat terhubung dengan internet melalui DNS tersebut
-- 
+- konfigurasi ``option broadcast-address`` dan ``option domain-name-server`` agar tiap client bisa terkoneksi dengan internet
 
 ```sh
 echo 'subnet 10.50.1.0 netmask 255.255.255.0 {
@@ -492,22 +492,27 @@ service nginx restart
 ```
 
 - test menggunakan apacheberchmark diclient
+
 ![Alt text](img/image-9.png)
+
 # Soal 8
 Hasil testing dengan 200 request dan 10 request/second masing-masing algoritma Load Balancer 
 untuk test jalankan command berikut `ab -n 200 -c 10 http://www.granz.channel.e27.com/ `
 
 **Round Robin**
+
 ![Alt text](img/image-10.png)
 
 ![Alt text](img/image-24.png)
 
 **IP Hash**
+
 ![Alt text](img/image-12.png)
 
 ![Alt text](img/image-25.png)
 
 **Least Connected**
+
 ![Alt text](img/image-14.png)
 
 ![Alt text](img/image-26.png)
@@ -516,7 +521,11 @@ untuk test jalankan command berikut `ab -n 200 -c 10 http://www.granz.channel.e2
 
 ![Alt text](img/image-17.png)
 # Soal 9
-lakukan testing dengan menggunakan 3 worker, 2 worker, dan 1 worker sebanyak 100 request dengan 10 request/second, kemudian tambahkan grafiknya pada grimoire.
+lakukan testing dengan menggunakan 3 worker, 2 worker, dan 1 worker sebanyak 100 request dengan 10 request/second, kemudian tambahkan grafiknya pada grimoire. 
+
+```sh
+ab -n 100 -c 10 http://www.granz.channel.e27.com/ 
+```
 
 - Satu Worker
 
@@ -537,6 +546,47 @@ lakukan testing dengan menggunakan 3 worker, 2 worker, dan 1 worker sebanyak 100
 ![Alt text](img/image-23.png)
 
 # Soal 10
+Selanjutnya coba tambahkan konfigurasi autentikasi di LB dengan dengan kombinasi username: “netics” dan password: “ajkyyy”, dengan yyy merupakan kode kelompok. Terakhir simpan file “htpasswd” nya di /etc/nginx/rahasisakita/ 
+
+- konfigurasi pada load balancer, dengan menambah autentikasi 
+
+```sh 
+mkdir /etc/nginx/rahasisakita
+htpasswd -c /etc/nginx/rahasisakita/htpasswd netics
+```
+- kemudian menambah auth_basic di konfigurasi Load balancer, disini kami sudah mencoba namun hasilnya gagal, tidak ditemukan notifikasi saat diakses dari client
+
+`auth_basic "Administrator's only";
+auth_basic_user_file /etc/nginx/rahasisakita/htpasswd;
+`
+```
+echo '
+upstream worker {
+    server 10.50.3.1;
+    server 10.50.3.2;
+    server 10.50.3.3;
+}
+
+server {
+    listen 80;
+    server_name granz.channel.e27.com www.granz.channel.e27.com;
+    root /var/www/html;
+
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name _;
+
+    location / {
+        proxy_pass http://worker;
+    }
+        auth_basic "Administrators Area";
+        auth_basic_user_file /etc/nginx/rahasisakita/htpasswd;
+
+}' > /etc/nginx/sites-available/lb
+
+service nginx restart
+```
+
 # Soal 11
 # Soal 12
 # Soal 13
@@ -547,3 +597,5 @@ lakukan testing dengan menggunakan 3 worker, 2 worker, dan 1 worker sebanyak 100
 # Soal 18
 # Soal 19
 # Soal 20
+# Kesulitan dan masalah
+- pada Praktikum kali ini saya mengalami masalah koneksi internet pada saat menjalankan apt update maupun script yang telah dibuat, seperti instalasi `connecting to debian` dan err . Masalah pada saat konfigurasi tiap nodes terutama pada php dan laravel. 
