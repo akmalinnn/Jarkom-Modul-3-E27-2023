@@ -598,4 +598,4 @@ service nginx restart
 # Soal 19
 # Soal 20
 # Kesulitan dan masalah
-- pada Praktikum kali ini saya mengalami masalah koneksi internet pada saat menjalankan apt update maupun script yang telah dibuat, seperti instalasi `connecting to debian` dan err . Masalah pada saat konfigurasi tiap nodes terutama pada php dan laravel. 
+- pada Praktikum kali ini saya (Akmal) mengalami masalah koneksi internet pada saat menjalankan apt update maupun script yang telah dibuat, seperti instalasi `connecting to debian` dan err, saya coba berganti jaringan dan mengatur proxy ke 8.8.8.8 tapi masih sama. GNS3 sering menstop project sendiri. Sehingga lebih banyak memakan waktu untuk troubleshooting
